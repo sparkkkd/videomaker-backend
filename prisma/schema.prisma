@@ -48,6 +48,8 @@ model AdminUser {
   email    String @unique @db.VarChar(255)
   password String @db.VarChar(255)
 
+  refreshTokens RefreshToken[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -59,6 +61,8 @@ model RefreshToken {
   token     String   @unique
   userId    String
   expiresAt DateTime
+
+  user AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
