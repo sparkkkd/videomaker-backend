@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 
-export class TabResponseDto {
+export class ProjectResponseDto {
   @ApiProperty()
   id!: string
 
@@ -9,6 +9,15 @@ export class TabResponseDto {
 
   @ApiProperty()
   slug!: string
+
+  @ApiProperty()
+  description!: string
+
+  @ApiProperty()
+  src!: string
+
+  @ApiProperty({ required: false })
+  href?: string | null
 
   @ApiProperty()
   order!: number
