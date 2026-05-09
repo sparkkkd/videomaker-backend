@@ -1,0 +1,599 @@
+{
+	"info": {
+		"name": "🎬 Videomaker CMS Backend API",
+		"description": "API для управления портфолио",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "accessToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "refreshToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "activeTabId",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "🏥 00_Health",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/health",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"health"
+							]
+						},
+						"description": "Проверка статуса API"
+					}
+				},
+				{
+					"name": "Database Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/health/db",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"health",
+								"db"
+							]
+						},
+						"description": "Проверка подключения к БД"
+					}
+				}
+			]
+		},
+		{
+			"name": "🔐 01_Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const json = pm.response.json();",
+									"    pm.collectionVariables.set('accessToken', json.accessToken);",
+									"    pm.collectionVariables.set('refreshToken', json.refreshToken);",
+									"    console.log('✅ Tokens saved');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"ChangeMe123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Вход в админку. Токены сохраняются в переменные коллекции."
+					}
+				},
+				{
+					"name": "Refresh Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{refreshToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/auth/refresh",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"refresh"
+							]
+						},
+						"description": "Обновление access токена через refresh токен"
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{refreshToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/auth/logout",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						},
+						"description": "Выход из системы (инвалидация refresh токена)"
+					}
+				}
+			]
+		},
+		{
+			"name": "📑 02_Tabs",
+			"item": [
+				{
+					"name": "Get All Tabs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/tabs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tabs"
+							],
+							"query": [
+								{
+									"key": "includeProjects",
+									"value": "false",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Получить все активные табы (публичный эндпоинт)"
+					}
+				},
+				{
+					"name": "Get Tabs with Projects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/tabs/with-projects",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tabs",
+								"with-projects"
+							]
+						},
+						"description": "Получить табы с вложенными проектами"
+					}
+				},
+				{
+					"name": "Get Tab by Slug",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/tabs/slug/motion-design",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tabs",
+								"slug",
+								"motion-design"
+							]
+						},
+						"description": "Получить таб по slug (с проектами)"
+					}
+				},
+				{
+					"name": "Get Tab by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/tabs/{{activeTabId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tabs",
+								"{{activeTabId}}"
+							]
+						},
+						"description": "Получить таб по ID (с проектами)"
+					}
+				},
+				{
+					"name": "Create Tab 🔐",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"label\": \"Новый таб\",\n  \"slug\": \"noviy-tab\",\n  \"description\": \"Описание таба\",\n  \"order\": 10\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/tabs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tabs"
+							]
+						},
+						"description": "Создать новый таб (требуется авторизация)"
+					}
+				},
+				{
+					"name": "Update Tab 🔐",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"label\": \"Обновлённый таб\",\n  \"order\": 5\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/tabs/{{activeTabId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tabs",
+								"{{activeTabId}}"
+							]
+						},
+						"description": "Обновить таб по ID (частичное обновление)"
+					}
+				},
+				{
+					"name": "Delete Tab 🔐",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/tabs/{{activeTabId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tabs",
+								"{{activeTabId}}"
+							]
+						},
+						"description": "Удалить таб (каскадно удалит все проекты внутри)"
+					}
+				},
+				{
+					"name": "Reorder Tabs 🔐",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  \"tab-id-1\",\n  \"tab-id-2\",\n  \"tab-id-3\"\n]"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/tabs/reorder",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tabs",
+								"reorder"
+							]
+						},
+						"description": "Изменить порядок табов (массив ID в новом порядке)"
+					}
+				}
+			]
+		},
+		{
+			"name": "🎬 03_Projects",
+			"item": [
+				{
+					"name": "Get All Projects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/projects",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"projects"
+							],
+							"query": [
+								{
+									"key": "tabId",
+									"value": "{{activeTabId}}",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Получить все проекты (опционально фильтровать по tabId)"
+					}
+				},
+				{
+					"name": "Get Project by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/projects/project-id-here",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"projects",
+								"project-id-here"
+							]
+						},
+						"description": "Получить проект по ID"
+					}
+				},
+				{
+					"name": "Create Project 🔐",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"label\": \"Промо-ролик для бренда\",\n  \"slug\": \"promo-rollik-brenda\",\n  \"description\": \"Краткое описание проекта\",\n  \"src\": \"/uploads/projects/1704067200000-abc123.jpg\",\n  \"href\": \"https://vimeo.com/123456\",\n  \"order\": 0,\n  \"tabId\": \"{{activeTabId}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/projects",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"projects"
+							]
+						},
+						"description": "Создать новый проект (src — путь после загрузки файла)"
+					}
+				},
+				{
+					"name": "Update Project 🔐",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"label\": \"Обновлённое название\",\n  \"href\": \"https://youtube.com/watch?v=xxx\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/projects/project-id-here",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"projects",
+								"project-id-here"
+							]
+						},
+						"description": "Обновить проект (частичное обновление)"
+					}
+				},
+				{
+					"name": "Delete Project 🔐",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/projects/project-id-here",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"projects",
+								"project-id-here"
+							]
+						},
+						"description": "Удалить проект (файл изображения также удалится)"
+					}
+				},
+				{
+					"name": "Reorder Projects 🔐",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"projectIds\": [\"proj-1\", \"proj-2\", \"proj-3\"],\n  \"tabId\": \"{{activeTabId}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/projects/reorder?tabId={{activeTabId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"projects",
+								"reorder"
+							],
+							"query": [
+								{
+									"key": "tabId",
+									"value": "{{activeTabId}}"
+								}
+							]
+						},
+						"description": "Изменить порядок проектов внутри таба"
+					}
+				}
+			]
+		},
+		{
+			"name": "📤 04_Uploads",
+			"item": [
+				{
+					"name": "Upload Image 🔐",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/path/to/your/image.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/upload/projects",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"upload",
+								"projects"
+							]
+						},
+						"description": "Загрузить изображение. Ответ содержит публичный путь: /uploads/projects/xxx.jpg"
+					}
+				},
+				{
+					"name": "Get Uploaded File",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/uploads/projects/1704067200000-abc123.jpg",
+							"host": [
+								"http://localhost:3000"
+							],
+							"path": [
+								"uploads",
+								"projects",
+								"1704067200000-abc123.jpg"
+							]
+						},
+						"description": "Прямой доступ к загруженному файлу (не через API префикс)"
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{accessToken}}",
+				"type": "string"
+			}
+		]
+	}
+}

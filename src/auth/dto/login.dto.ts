@@ -3,19 +3,19 @@ import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator'
 
 export class LoginDto {
   @ApiProperty({
-    example: 'admin@exmaple.com',
+    example: 'admin@example.com',
     description: 'Email администратора',
   })
-  @IsEmail({}, { message: 'Некорректный email' })
-  @IsNotEmpty({ message: 'Email не может быть пустым' })
+  @IsEmail({}, { message: 'Невалидный email' })
+  @IsNotEmpty({ message: 'Email обязателен' })
   readonly email!: string
 
   @ApiProperty({
-    example: '123456',
-    description: 'Пароль администратора',
+    example: 'password123',
+    description: 'Пароль (мин. 6 символов)',
   })
   @IsString()
-  @IsNotEmpty({ message: 'Пароль не может быть пустым' })
-  @MinLength(6, { message: 'Пароль должен быть не менее 6 символов' })
+  @IsNotEmpty({ message: 'Пароль обязателен' })
+  @MinLength(6, { message: 'Минимум 6 символов' })
   readonly password!: string
 }

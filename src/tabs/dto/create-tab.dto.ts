@@ -23,11 +23,6 @@ export class CreateTabDto {
   @Matches(/^[a-z0-9-]+$/, { message: 'Только латиница, цифры и дефис' })
   readonly slug!: string
 
-  @ApiPropertyOptional({ description: 'Описание' })
-  @IsString()
-  @MaxLength(500)
-  readonly description!: string
-
   @ApiPropertyOptional({ example: 0, description: 'Порядок сортировки' })
   @IsOptional()
   @IsNumber()

@@ -13,6 +13,7 @@ import { TabsModule } from './tabs/tabs.module'
 import { ProjectsModule } from './projects/projects.module'
 import { UploadsModule } from './uploads/uploads.module'
 import { HealthModule } from './health/health.module'
+import { AuthModule } from './auth/auth.module'
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { HealthModule } from './health/health.module'
     }),
 
     PrismaModule,
+    AuthModule,
     TabsModule,
     ProjectsModule,
     UploadsModule,
