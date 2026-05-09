@@ -1,18 +1,18 @@
 import { Module } from '@nestjs/common'
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 
 import appConfig from './config/config'
+import { AllExceptionsFilter } from './common/filters/http-exception.filter'
 
-import { AppController } from './app.controller'
-import { AppService } from './app.service'
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor'
+
+import { PrismaModule } from './database/prisma.module'
 import { TabsModule } from './tabs/tabs.module'
 import { ProjectsModule } from './projects/projects.module'
 import { UploadsModule } from './uploads/uploads.module'
 import { HealthModule } from './health/health.module'
-import { ConfigModule, ConfigService } from '@nestjs/config'
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
-import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core'
-import { AllExceptionsFilter } from './common/filters/http-exception.filter'
-import { LoggingInterceptor } from './common/interceptors/logging.interceptor'
 
 @Module({
   imports: [
@@ -36,12 +36,13 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor'
       }),
     }),
 
+    PrismaModule,
     TabsModule,
     ProjectsModule,
     UploadsModule,
     HealthModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
     {
       provide: APP_FILTER,

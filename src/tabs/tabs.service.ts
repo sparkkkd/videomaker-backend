@@ -56,7 +56,8 @@ export class TabsService {
         slug: true,
         order: true,
         projects: {
-          where: { isActive: true, orderBy: 'asc' },
+          where: { isActive: true },
+          orderBy: { order: 'asc' },
           select: {
             id: true,
             label: true,
