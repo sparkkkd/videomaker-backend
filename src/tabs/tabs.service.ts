@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -64,6 +65,8 @@ export class TabsService {
             src: true,
             href: true,
             order: true,
+            createdAt: true,
+            updatedAt: true,
           },
         },
       },
@@ -89,6 +92,8 @@ export class TabsService {
             src: true,
             href: true,
             order: true,
+            createdAt: true,
+            updatedAt: true,
           },
         },
       },
@@ -118,6 +123,8 @@ export class TabsService {
             src: true,
             href: true,
             order: true,
+            createdAt: true,
+            updatedAt: true,
           },
         },
       },
@@ -162,6 +169,17 @@ export class TabsService {
   }
 
   async reorder(tabIds: string[]): Promise<{ message: string }> {
+    const validTabs = await this.prisma.tab.findMany({
+      where: { id: { in: tabIds }, isActive: true },
+      select: { id: true },
+    })
+
+    if (validTabs.length !== tabIds.length) {
+      throw new BadRequestException(
+        'Некоторые табы не существуют или неактивны',
+      )
+    }
+
     await this.prisma.$transaction(
       tabIds.map((id, index) =>
         this.prisma.tab.update({ where: { id }, data: { order: index } }),

@@ -68,3 +68,16 @@ model RefreshToken {
 
   @@index([token, expiresAt])
 }
+
+model FileUpload {
+  id       String  @id @default(cuid())
+  path     String  @unique @db.VarChar(500)
+  filename String  @db.VarChar(255)
+  mimeType String  @db.VarChar(100)
+  size     Int
+  linked   Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([linked, createdAt])
+}

@@ -21,4 +21,10 @@ export class ProjectResponseDto {
 
   @ApiProperty()
   order!: number
+
+  @ApiProperty()
+  createdAt!: Date
+
+  @ApiProperty()
+  updatedAt!: Date
 }
