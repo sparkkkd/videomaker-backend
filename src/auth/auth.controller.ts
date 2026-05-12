@@ -42,7 +42,6 @@ export class AuthController {
   })
   async login(
     @Body() loginDto: LoginDto,
-
     @Res({ passthrough: true })
     response: Response,
   ): Promise<TokenResponseDto> {
@@ -52,7 +51,6 @@ export class AuthController {
 
     return {
       ...tokens,
-
       refreshToken: undefined!,
     }
   }
@@ -86,7 +84,6 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async logout(
     @Req() request: Request,
-
     @Res({ passthrough: true })
     response: Response,
   ): Promise<void> {
