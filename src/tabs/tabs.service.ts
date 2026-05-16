@@ -35,26 +35,28 @@ export class TabsService {
 
   async findAll(): Promise<TabResponseDto[]> {
     return this.prisma.tab.findMany({
-      where: { isActive: true },
+      // where: { isActive: true },
       orderBy: { order: 'asc' },
       select: {
         id: true,
         label: true,
         slug: true,
         order: true,
+        isActive: true,
       },
     })
   }
 
   async finfAllWithProjects(): Promise<TabWithProjectsResponseDto[]> {
     return this.prisma.tab.findMany({
-      where: { isActive: true },
+      // where: { isActive: true },
       orderBy: { order: 'asc' },
       select: {
         id: true,
         label: true,
         slug: true,
         order: true,
+        isActive: true,
         projects: {
           where: { isActive: true },
           orderBy: { order: 'asc' },

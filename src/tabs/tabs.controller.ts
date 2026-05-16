@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   UseGuards,
-  ParseUUIDPipe,
 } from '@nestjs/common'
 import { TabsService } from './tabs.service'
 import { CreateTabDto } from './dto/create-tab.dto'
@@ -60,7 +59,7 @@ export class TabsController {
   @Get(':id')
   @ApiOperation({ summary: 'Получить таб по ID (с проектами)' })
   @ApiResponse({ status: 200, type: TabWithProjectsResponseDto })
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
+  findOne(@Param('id') id: string) {
     return this.tabsService.findOneWithProjects(id)
   }
 
@@ -69,10 +68,7 @@ export class TabsController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Обновить таб' })
   @ApiResponse({ status: 200, type: TabResponseDto })
-  update(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateTabDto: UpdateTabDto,
-  ) {
+  update(@Param('id') id: string, @Body() updateTabDto: UpdateTabDto) {
     return this.tabsService.update(id, updateTabDto)
   }
 
@@ -81,7 +77,7 @@ export class TabsController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Удалить таб' })
   @ApiResponse({ status: 200 })
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  remove(@Param('id') id: string) {
     return this.tabsService.remove(id)
   }
 

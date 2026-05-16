@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   UseGuards,
-  ParseUUIDPipe,
   Query,
 } from '@nestjs/common'
 import { ProjectsService } from './projects.service'
@@ -54,7 +53,7 @@ export class ProjectsController {
   @Get(':id')
   @ApiOperation({ summary: 'Получить проект по ID' })
   @ApiResponse({ status: 200, type: ProjectWithTabResponseDto })
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
+  findOne(@Param('id') id: string) {
     return this.projectsService.findOne(id)
   }
 
@@ -63,10 +62,7 @@ export class ProjectsController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Обновить проект' })
   @ApiResponse({ status: 200, type: ProjectResponseDto })
-  update(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateProjectDto: UpdateProjectDto,
-  ) {
+  update(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto) {
     return this.projectsService.update(id, updateProjectDto)
   }
 
@@ -75,7 +71,7 @@ export class ProjectsController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Удалить проект' })
   @ApiResponse({ status: 200 })
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  remove(@Param('id') id: string) {
     return this.projectsService.remove(id)
   }
 

@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import {
+  IsBoolean,
   IsNumber,
   IsOptional,
   IsString,
@@ -28,4 +29,12 @@ export class CreateTabDto {
   @IsNumber()
   @Min(0)
   readonly order?: number
+
+  @ApiPropertyOptional({
+    example: true,
+    description: 'Активный/неактивный таб',
+  })
+  @IsOptional()
+  @IsBoolean()
+  readonly isActive?: boolean
 }

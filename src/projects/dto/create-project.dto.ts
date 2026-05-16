@@ -7,6 +7,7 @@ import {
   Min,
   MaxLength,
   Matches,
+  IsBoolean,
 } from 'class-validator'
 
 export class CreateProjectDto {
@@ -58,4 +59,12 @@ export class CreateProjectDto {
   @ApiProperty({ description: 'ID таба' })
   @IsString()
   readonly tabId!: string
+
+  @ApiPropertyOptional({
+    example: true,
+    description: 'Активный/неактивный проект',
+  })
+  @IsOptional()
+  @IsBoolean()
+  readonly isActive?: boolean
 }

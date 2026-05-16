@@ -81,6 +81,7 @@ export class ProjectsService {
         src: true,
         href: true,
         order: true,
+        isActive: true,
         tab: { select: { id: true, label: true, slug: true } },
         createdAt: true,
         updatedAt: true,
