@@ -46,7 +46,7 @@ export class TabsController {
   @ApiOperation({ summary: 'Получить список табов с проектами' })
   @ApiResponse({ status: 200, type: [TabWithProjectsResponseDto] })
   findAllWithProjects() {
-    return this.tabsService.finfAllWithProjects()
+    return this.tabsService.findAllWithProjects()
   }
 
   @Get('slug/:slug')

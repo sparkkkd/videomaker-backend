@@ -47,7 +47,7 @@ export class TabsService {
     })
   }
 
-  async finfAllWithProjects(): Promise<TabWithProjectsResponseDto[]> {
+  async findAllWithProjects(): Promise<TabWithProjectsResponseDto[]> {
     return this.prisma.tab.findMany({
       // where: { isActive: true },
       orderBy: { order: 'asc' },
