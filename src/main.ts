@@ -21,13 +21,7 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
 
-  // ✅ process.cwd() всегда = корень проекта (C:\Code\videomaker-backend)
   const uploadsPath = join(process.cwd(), 'uploads')
-
-  console.log('📁 Serving static files from:', uploadsPath)
-  console.log('🔍 process.cwd():', process.cwd())
-
-  // Вариант 1: useStaticAssets (может быть капризным)
   app.useStaticAssets(uploadsPath, { prefix: '/uploads/' })
 
   const apiPrefix = configService.get<string>('app.apiPrefix') || 'api'
