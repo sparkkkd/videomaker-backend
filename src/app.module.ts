@@ -20,7 +20,7 @@ import { AuthModule } from './auth/auth.module'
     ConfigModule.forRoot({
       isGlobal: true,
       load: [appConfig],
-      envFilePath: '.env',
+      envFilePath: [`.env.${process.env.NODE_ENV}`, '.env'],
     }),
 
     ThrottlerModule.forRootAsync({
