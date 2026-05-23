@@ -14,7 +14,7 @@ export const setRefreshTokenCookie = (
   response.cookie(REFRESH_TOKEN_COOKIE, refreshToken, {
     httpOnly: true,
     secure: isProd,
-    sameSite: isProd ? 'strict' : 'lax',
+    sameSite: 'lax',
     // path: '/',
     path: '/',
     maxAge: 1000 * 60 * 60 * 24 * 30,
