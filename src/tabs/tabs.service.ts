@@ -173,14 +173,12 @@ export class TabsService {
 
   async reorder(tabIds: string[]): Promise<{ message: string }> {
     const validTabs = await this.prisma.tab.findMany({
-      where: { id: { in: tabIds }, isActive: true },
+      where: { id: { in: tabIds } },
       select: { id: true },
     })
 
     if (validTabs.length !== tabIds.length) {
-      throw new BadRequestException(
-        'Некоторые табы не существуют или неактивны',
-      )
+      throw new BadRequestException('Некоторые табы не существуют')
     }
 
     await this.prisma.$transaction(

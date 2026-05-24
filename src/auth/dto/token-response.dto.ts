@@ -7,9 +7,9 @@ export class TokenResponseDto {
   @ApiProperty({ description: 'Refresh token' })
   refreshToken!: string
 
-  @ApiProperty({ description: 'Тип токена' })
-  tokenType!: string
+  // @ApiProperty({ description: 'Тип токена' })
+  // tokenType!: string
 
-  @ApiProperty({ description: 'Время жизни токена' })
-  expiresIn!: number
+  // @ApiProperty({ description: 'Время жизни токена' })
+  // expiresIn!: number
 }

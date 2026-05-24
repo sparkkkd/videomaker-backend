@@ -31,7 +31,10 @@ export class AuthService {
 
     await this.storeRefreshToken(admin.userId, tokens.refreshToken)
 
-    return tokens
+    return {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+    }
   }
 
   async refresh(refreshToken: string): Promise<TokenResponseDto> {
@@ -175,8 +178,6 @@ export class AuthService {
     return {
       accessToken,
       refreshToken,
-      tokenType: 'Bearer',
-      expiresIn: 60 * 15,
     }
   }
 
