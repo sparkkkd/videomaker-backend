@@ -6,14 +6,15 @@ export const setRefreshTokenCookie = (
   response: Response,
   refreshToken: string,
 ) => {
-  const isProd = process.env.NODE_ENV === 'production'
+  // const isProd = process.env.NODE_ENV === 'production'
 
   response.clearCookie(REFRESH_TOKEN_COOKIE, { path: '/api/v1/auth/refresh' })
   response.clearCookie(REFRESH_TOKEN_COOKIE, { path: '/api/v1' })
 
   response.cookie(REFRESH_TOKEN_COOKIE, refreshToken, {
     httpOnly: true,
-    secure: isProd,
+    // secure: isProd,
+    secure: false,
     sameSite: 'lax',
     // path: '/',
     path: '/',
